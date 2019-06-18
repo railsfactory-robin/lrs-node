@@ -1,9 +1,9 @@
-// module.exports = require('knex')({
-//   client: 'pg',
-//   connection: {
-//     host: '127.0.0.1',
-//     user: 'postgres',
-//     password: 'root',
-//     database: 'nodeapp'
-//   }
-// });
+module.exports = require('knex')({
+    client: 'pg',
+    connection: {
+        host: '127.0.0.1',
+        user: 'postgres',
+        password: 'root',
+        database: 'nodeapp'
+    }
+});
