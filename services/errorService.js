@@ -1,6 +1,6 @@
 const knex = require('../db')
 
-exports.createErrorLogs = async (error) => {
+exports.createErrorLogs = async (error, data) => {
   try {
     let obj = {
       "error_logs": error.obj,
@@ -9,21 +9,25 @@ exports.createErrorLogs = async (error) => {
     return await knex('logs').insert(obj).returning(['id'])
   } catch (err) {
     let error_code = await knex('error').where({ error_code: 'CREATE_USER_FAILED' })
-    return { error: err, message: getErrorParser(error_code[0].error_message) };
+    return { error: err, message: this.getErrorParser(error_code[0].error_message, data) };
   }
 }
 
-function getErrorParser(str) {
-  let sampleJson = {
-    user: "Robin Thomas",
-    date: '17/06/2019'
+exports.extractTextWithinBrackets = (str) => {
+  const match = /{([^}]+)}/g;
+  let fields = [], field;
+  while ((field = match.exec(str))) {
+    fields.push(field[1]);
   }
-  const regex = /\{([^}]+)\}/gm;
-  let array_data = str.match(regex)
-  array_data.map((item, index) => {
-    let result = item.substring(1, item.length - 1);
-    str = str.replace(`{${result}}`, sampleJson[result]);
+  return fields;
+}
+
+exports.getErrorParser = (str, data) => {
+  const fields = this.extractTextWithinBrackets(str)
+  fields.map((item) => {
+    str = str.replace(`{${item}}`, data[item]);
   })
   return str;
-}
 
+
+}

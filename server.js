@@ -23,4 +23,6 @@ app
   .use(router.allowedMethods())
   .use(require('koa-static')('build'));
 
-app.listen(4000);
+app.listen(4000, () => {
+  console.log("Server started in port 4000")
+});
