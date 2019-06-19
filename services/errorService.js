@@ -28,6 +28,4 @@ exports.getErrorParser = (str, data) => {
     str = str.replace(`{${item}}`, data[item]);
   })
   return str;
-
-
 }
